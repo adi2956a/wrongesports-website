@@ -15,11 +15,13 @@ async function apiGet(action, params = {}) {
   }
 }
 
-// All POST actions are also sent as GET to bypass CORS preflight
+// FORCE apiPost to actually use GET under the hood
 async function apiPost(action, body = {}) {
   try {
     body.action = action;
     const url = CONFIG.API_URL + "?" + new URLSearchParams(body).toString();
+    
+    // Notice this says GET! This is the magic trick to bypass CORS
     const res = await fetch(url, { method: "GET", redirect: "follow" });
     const text = await res.text();
     return JSON.parse(text);
