@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WrongEsports</title>
+  <meta name="description" content="Free Fire tournaments. Real prizes.">
+  <meta property="og:title" content="WrongEsports">
+  <meta property="og:description" content="Free Fire tournaments. Real prizes.">
+  <meta property="og:image" content="https://esports.onlyaadi.in/images/og-banner.png">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/index.html" class="nav-logo">Wrong<span>Esports</span></a>
+    <button class="nav-toggle" id="navToggle">?</button>
+    <div class="nav-links" id="navLinks">
+      <a href="/index.html">Home</a>
+      <a href="/tournaments.html">Tournaments</a>
+      <a href="/leaderboard.html">Leaderboard</a>
+      <a href="/teams.html">Teams</a>
+      <a href="/media.html">Media</a>
+      <a href="/help.html">Help</a>
+    </div>
+    <div class="nav-auth" id="navAuth"></div>
+  </nav>
+
+  <main>
+    <section class="hero hero-home">
+      <div class="hero-content">
+        <h1>COMPETE. DOMINATE. WIN.</h1>
+        <p>Free Fire tournaments. Real prizes. Real competition.</p>
+        <div class="inline-actions" style="justify-content:center; margin-top:2rem;">
+          <a href="/register.html" class="btn-primary">Register Now</a>
+          <a href="/tournaments.html" class="btn-secondary">View Tournaments</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="page-shell">
+        <div class="section-head"><h2 class="section-title">ACTIVE TOURNAMENTS</h2></div>
+        <div class="horizontal-scroll" id="homeTournaments"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="page-shell">
+        <div class="section-head"><h2 class="section-title">TOP PLAYERS</h2></div>
+        <div id="topPlayersTable"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="page-shell">
+        <div class="section-head"><h2 class="section-title">HALL OF CHAMPIONS</h2></div>
+        <div class="horizontal-scroll">
+          <article class="surface-card showcase-card">
+            <p style="color:var(--primary);">WRONGESPORTS INVITATIONAL</p>
+            <h3 style="margin-top:0.75rem;">TBD</h3>
+            <div class="inline-actions" style="margin-top:1rem;"><span class="pill">Kills TBD</span><span class="pill">Rank TBD</span></div>
+          </article>
+          <article class="surface-card showcase-card">
+            <p style="color:var(--primary);">PRO NIGHT CLASH</p>
+            <h3 style="margin-top:0.75rem;">TBD</h3>
+            <div class="inline-actions" style="margin-top:1rem;"><span class="pill">Kills TBD</span><span class="pill">Rank TBD</span></div>
+          </article>
+          <article class="surface-card showcase-card">
+            <p style="color:var(--primary);">SQUAD ELITE CUP</p>
+            <h3 style="margin-top:0.75rem;">TBD</h3>
+            <div class="inline-actions" style="margin-top:1rem;"><span class="pill">Kills TBD</span><span class="pill">Rank TBD</span></div>
+          </article>
+        </div>
+        <!-- Admin updates match results which will populate this dynamically in future -->
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="page-shell">
+        <div class="community-card card stack">
+          <h2 class="section-title">Join the WrongEsports community</h2>
+          <p>Get updates, results, and connect with players</p>
+          <div class="inline-actions" style="justify-content:center;">
+            <button class="btn-accent" id="discordBtn">Join Discord</button>
+            <button class="btn-success" id="telegramBtn">Join Telegram</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="page-shell footer-grid">
+      <div>
+        <div class="nav-logo">Wrong<span>Esports</span></div>
+        <p style="margin-top:1rem;">Free Fire tournaments built for grinders, squads, and future champions.</p>
+      </div>
+      <div>
+        <h3 class="footer-title">Pages</h3>
+        <div class="footer-links">
+          <a href="/index.html">Home</a>
+          <a href="/tournaments.html">Tournaments</a>
+          <a href="/leaderboard.html">Leaderboard</a>
+          <a href="/help.html">Help</a>
+        </div>
+      </div>
+      <div>
+        <h3 class="footer-title">Community</h3>
+        <div class="footer-links">
+          <a href="https://discord.com/invite/TvwWTkFPSf" target="_blank" rel="noreferrer">Discord</a>
+          <a href="https://t.me/wrongsports" target="_blank" rel="noreferrer">Telegram</a>
+          <p class="footer-copy">© 2026 WrongEsports</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>

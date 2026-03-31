@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help | WrongEsports</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/index.html" class="nav-logo">Wrong<span>Esports</span></a>
+    <button class="nav-toggle" id="navToggle">?</button>
+    <div class="nav-links" id="navLinks">
+      <a href="/index.html">Home</a>
+      <a href="/tournaments.html">Tournaments</a>
+      <a href="/leaderboard.html">Leaderboard</a>
+      <a href="/teams.html">Teams</a>
+      <a href="/media.html">Media</a>
+      <a href="/help.html">Help</a>
+    </div>
+    <div class="nav-auth" id="navAuth"></div>
+  </nav>
+
+  <main>
+    <section class="section">
+      <div class="page-shell stack">
+        <article class="surface-card stack">
+          <h1 class="section-title">Contact Admin</h1>
+          <p>Need direct help? Chat with an admin on Discord.</p>
+          <div class="inline-actions"><button class="btn-accent" id="helpDiscordBtn">Chat on Discord</button></div>
+        </article>
+
+        <article class="surface-card stack">
+          <h2 class="section-title">Community</h2>
+          <div class="inline-actions"><button class="btn-accent" id="helpDiscordBtn2">Join Discord</button></div>
+          <div class="channel-pills">
+            <span class="channel-pill">#help-support</span>
+            <span class="channel-pill">#registration-help</span>
+            <span class="channel-pill">#report-cheater</span>
+          </div>
+        </article>
+
+        <article class="surface-card stack">
+          <h2 class="section-title">Telegram</h2>
+          <p>Get instant tournament updates, room info, and winner announcements.</p>
+          <div class="inline-actions"><button class="btn-success" id="helpTelegramBtn">Join Telegram</button></div>
+        </article>
+
+        <section class="stack">
+          <h2 class="section-title">FAQ</h2>
+          <div class="accordion-item"><button class="accordion-trigger">How do I register for a tournament?</button><div class="accordion-content"><p>Go to Tournaments page, click a tournament, and click Register. You must be logged in.</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger">Can I change my profile info?</button><div class="accordion-content"><p>Yes. Go to Dashboard &gt; Change Request and submit a request. Admin will review within 24 hours.</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger">How is KD calculated?</button><div class="accordion-content"><p>KD = Total Kills divided by (Total Matches minus Total Wins). Higher is better.</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger">What happens if I miss a match?</button><div class="accordion-content"><p>You will be marked as 0 kills and eliminated. No refunds or reschedules.</p></div></div>
+          <div class="accordion-item"><button class="accordion-trigger">How do I report a cheater?</button><div class="accordion-content"><p>Join Discord and post in #report-cheater with the player's UID and evidence.</p></div></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/home.js"></script>
+  <script src="/js/help.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | WrongEsports</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/index.html" class="nav-logo">Wrong<span>Esports</span></a>
+    <button class="nav-toggle" id="navToggle">?</button>
+    <div class="nav-links" id="navLinks">
+      <a href="/index.html">Home</a>
+      <a href="/tournaments.html">Tournaments</a>
+      <a href="/leaderboard.html">Leaderboard</a>
+      <a href="/teams.html">Teams</a>
+      <a href="/media.html">Media</a>
+      <a href="/help.html">Help</a>
+    </div>
+    <div class="nav-auth" id="navAuth"></div>
+  </nav>
+
+  <main class="auth-shell">
+    <section class="form-card">
+      <div class="auth-logo nav-logo">Wrong<span>Esports</span></div>
+      <h1 class="section-title" style="text-align:center;">WELCOME BACK</h1>
+      <p class="auth-subtext">Sign in to register for tournaments and track your results.</p>
+      <form id="loginForm" class="stack">
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" required></div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">LOGIN</button>
+          <p id="loginError" class="field-error"></p>
+          <button type="button" class="btn-secondary" id="forgotPasswordBtn">Forgot Password?</button>
+        </div>
+      </form>
+      <p style="text-align:center; margin-top:1rem;">Don't have an account? <a href="/register.html" style="color:var(--primary);">Register</a></p>
+    </section>
+  </main>
+
+  <div class="modal" id="forgotModal">
+    <div class="modal-card stack">
+      <button class="modal-close" id="closeForgotModal">Close</button>
+      <h3>Reset Password</h3>
+      <p>To reset your password, contact an admin on Discord.</p>
+      <button class="btn-accent" id="forgotDiscordBtn">Join Discord</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/auth-pages.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media | WrongEsports</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/index.html" class="nav-logo">Wrong<span>Esports</span></a>
+    <button class="nav-toggle" id="navToggle">?</button>
+    <div class="nav-links" id="navLinks">
+      <a href="/index.html">Home</a>
+      <a href="/tournaments.html">Tournaments</a>
+      <a href="/leaderboard.html">Leaderboard</a>
+      <a href="/teams.html">Teams</a>
+      <a href="/media.html">Media</a>
+      <a href="/help.html">Help</a>
+    </div>
+    <div class="nav-auth" id="navAuth"></div>
+  </nav>
+
+  <main>
+    <section class="section">
+      <div class="page-shell stack">
+        <div class="section-head"><h1 class="section-title">Tournament Highlights</h1></div>
+        <div class="media-grid">
+          <article class="surface-card media-card">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=80" alt="Highlight 1">
+            <h3 style="margin-top:1rem;">WrongEsports Finals Recap</h3>
+            <a class="btn-primary" style="margin-top:1rem; display:inline-flex;" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noreferrer">Watch on YouTube</a>
+          </article>
+          <article class="surface-card media-card">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80" alt="Highlight 2">
+            <h3 style="margin-top:1rem;">Clutch Squad Wipe Compilation</h3>
+            <a class="btn-primary" style="margin-top:1rem; display:inline-flex;" href="https://www.youtube.com/watch?v=jNQXAC9IVRw" target="_blank" rel="noreferrer">Watch on YouTube</a>
+          </article>
+          <article class="surface-card media-card">
+            <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=900&q=80" alt="Highlight 3">
+            <h3 style="margin-top:1rem;">Best Drops of the Week</h3>
+            <a class="btn-primary" style="margin-top:1rem; display:inline-flex;" href="https://www.youtube.com/watch?v=ysz5S6PUM-U" target="_blank" rel="noreferrer">Watch on YouTube</a>
+          </article>
+        </div>
+        <!-- Admin updates these links directly in HTML for now -->
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="page-shell stack">
+        <div class="section-head"><h2 class="section-title">Screenshots</h2></div>
+        <div class="screenshot-grid">
+          <button data-lightbox-src="https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=1200&q=80"><img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=900&q=80" alt="Screenshot 1"></button>
+          <button data-lightbox-src="https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1200&q=80"><img src="https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=900&q=80" alt="Screenshot 2"></button>
+          <button data-lightbox-src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"><img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80" alt="Screenshot 3"></button>
+          <button data-lightbox-src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=1200&q=80"><img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=900&q=80" alt="Screenshot 4"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="page-shell">
+        <div class="community-card card stack">
+          <h2 class="section-title">Share Your Clips</h2>
+          <p>Got highlights? Share in our Discord #media channel</p>
+          <div class="inline-actions" style="justify-content:center;">
+            <button class="btn-accent" id="mediaDiscordBtn">Join Discord</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox"><img id="lightboxImage" alt="Expanded media"></div>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/home.js"></script>
+  <script src="/js/media.js"></script>
+</body>
+</html>

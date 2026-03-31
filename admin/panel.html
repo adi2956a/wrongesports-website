@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | WrongEsports</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="admin-shell" id="adminPanel">
+    <div class="page-shell admin-layout">
+      <aside class="admin-sidebar">
+        <div class="admin-nav">
+          <button class="btn-secondary admin-tab active" data-tab="dashboard">Dashboard</button>
+          <button class="btn-secondary admin-tab" data-tab="players">Players</button>
+          <button class="btn-secondary admin-tab" data-tab="tournaments">Tournaments</button>
+          <button class="btn-secondary admin-tab" data-tab="room">Room Details</button>
+          <button class="btn-secondary admin-tab" data-tab="results">Match Results</button>
+          <button class="btn-secondary admin-tab" data-tab="requests">Change Requests</button>
+          <button class="btn-secondary admin-tab" data-tab="announcements">Announcements</button>
+          <button class="btn-primary" id="adminLogoutBtn">Logout</button>
+        </div>
+      </aside>
+
+      <section class="admin-content stack">
+        <section class="admin-panel active stack" data-tab="dashboard">
+          <h1 class="section-title">Dashboard</h1>
+          <div id="adminStats"></div>
+        </section>
+
+        <section class="admin-panel stack" data-tab="players">
+          <div class="search-row">
+            <h2 class="section-title">Players</h2>
+            <input id="playerSearch" placeholder="Search player..." style="max-width:320px;">
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>FFUID</th><th>Team</th><th>Email</th><th>Verified</th><th>Action</th></tr></thead><tbody id="playersTableBody"></tbody></table></div>
+        </section>
+
+        <section class="admin-panel stack" data-tab="tournaments">
+          <div class="search-row"><h2 class="section-title">Tournaments</h2><button class="btn-primary" id="openAddTournament">Add Tournament</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Game</th><th>Date</th><th>Status</th><th>Slots</th><th>Actions</th></tr></thead><tbody id="adminTournamentsTableBody"></tbody></table></div>
+        </section>
+
+        <section class="admin-panel stack" data-tab="room">
+          <h2 class="section-title">Room Details</h2>
+          <form id="roomDetailsForm" class="surface-card stack">
+            <div class="field"><label for="roomTournamentSelect">Tournament</label><select id="roomTournamentSelect" name="tournamentId"></select></div>
+            <div class="field"><label for="roomId">Room ID</label><input id="roomId" name="roomId" required></div>
+            <div class="field"><label for="roomPass">Room Password</label><input id="roomPass" name="roomPass" required></div>
+            <button class="btn-primary" type="submit">Save Room Details</button>
+            <p id="roomDetailsMessage"></p>
+          </form>
+        </section>
+
+        <section class="admin-panel stack" data-tab="results">
+          <h2 class="section-title">Match Results</h2>
+          <form id="matchResultsForm" class="stack">
+            <div class="field"><label for="resultsTournamentSelect">Tournament</label><select id="resultsTournamentSelect"></select></div>
+            <div class="table-wrap"><table><thead><tr><th>Player Name</th><th>Kills</th><th>Rank</th></tr></thead><tbody id="matchResultsTableBody"></tbody></table></div>
+            <p style="color:var(--warning);">?? This cannot be undone. Verify all results before submitting.</p>
+            <button class="btn-primary" type="submit">Submit All Results</button>
+            <p id="matchResultsMessage"></p>
+          </form>
+        </section>
+
+        <section class="admin-panel stack" data-tab="requests">
+          <div class="filter-tabs">
+            <button class="filter-btn request-filter active" data-filter="all">All</button>
+            <button class="filter-btn request-filter" data-filter="pending">Pending</button>
+            <button class="filter-btn request-filter" data-filter="approved">Approved</button>
+            <button class="filter-btn request-filter" data-filter="rejected">Rejected</button>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Player</th><th>Field</th><th>New Value</th><th>Reason</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="changeRequestsTableBody"></tbody></table></div>
+        </section>
+
+        <section class="admin-panel stack" data-tab="announcements">
+          <form id="announcementForm" class="surface-card stack">
+            <h2 class="section-title">Announcements</h2>
+            <div class="field"><label for="title">Title</label><input id="title" name="title" required></div>
+            <div class="field"><label for="body">Body</label><textarea id="body" name="body" required></textarea></div>
+            <button type="submit" class="btn-primary">Post &amp; Send to Telegram</button>
+            <p id="announcementMessage"></p>
+          </form>
+          <div class="table-wrap"><table><thead><tr><th>Title</th><th>Date</th><th>Telegram Status</th></tr></thead><tbody id="announcementsTableBody"></tbody></table></div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal" id="adminPlayerModal"><div class="modal-card stack"><button class="modal-close" id="closeAdminPlayerModal">Close</button><div id="adminPlayerModalBody"></div></div></div>
+  <div class="modal" id="tournamentModal">
+    <div class="modal-card stack">
+      <button class="modal-close" id="closeTournamentModal">Close</button>
+      <form id="tournamentForm" class="stack">
+        <div class="field"><label for="name">Name</label><input id="name" name="name" required></div>
+        <div class="field"><label for="game">Game</label><input id="game" name="game" required></div>
+        <div class="field"><label for="date">Date</label><input id="date" name="date" type="date" required></div>
+        <div class="field"><label for="time">Time</label><input id="time" name="time" type="time" required></div>
+        <div class="field"><label for="prizePool">Prize Pool</label><input id="prizePool" name="prizePool" required></div>
+        <div class="field"><label for="totalSlots">Total Slots</label><input id="totalSlots" name="totalSlots" required></div>
+        <div class="field"><label for="rules">Rules</label><textarea id="rules" name="rules"></textarea></div>
+        <div class="field"><label for="mapName">Map Name</label><input id="mapName" name="mapName"></div>
+        <div class="field"><label for="bannerUrl">Banner URL</label><input id="bannerUrl" name="bannerUrl"></div>
+        <button class="btn-primary" type="submit">Save Tournament</button>
+        <p id="tournamentMessage"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/home.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
