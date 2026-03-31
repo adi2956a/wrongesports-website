@@ -120,6 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const discordBtn = document.getElementById("discordBtn");
   const telegramBtn = document.getElementById("telegramBtn");
+  const instagramBtn = document.getElementById("instagramBtn");
+  const youtubeBtn = document.getElementById("youtubeBtn");
   if (discordBtn) discordBtn.addEventListener("click", () => openExternalLink(CONFIG.DISCORD_INVITE));
   if (telegramBtn) telegramBtn.addEventListener("click", () => openExternalLink(CONFIG.TELEGRAM_GROUP));
+  if (instagramBtn) instagramBtn.addEventListener("click", () => openExternalLink(CONFIG.INSTAGRAM_URL));
+  if (youtubeBtn) youtubeBtn.addEventListener("click", () => openExternalLink(CONFIG.YOUTUBE_URL));
 });

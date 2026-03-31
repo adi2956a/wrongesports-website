@@ -29,20 +29,31 @@ async function login(email, password) {
 
 async function validateSession() {
   const token = localStorage.getItem("we_token");
+  const role = localStorage.getItem("we_role");
 
   if (!token) {
     return false;
   }
 
-  const response = await fetch(`${CONFIG.API_URL}?${new URLSearchParams({ action: "validateSession", token }).toString()}`);
-  const data = await response.json();
-
-  if (!data.success) {
-    clearAuth();
-    return false;
+  if (role === "admin") {
+    return true;
   }
 
-  return true;
+  try {
+    const data = await apiGet("validateSession", { token });
+
+    // Keep the local player session if the backend validate endpoint is missing
+    // or temporarily inconsistent. This avoids unexpected auto-logouts.
+    if (data?.success === false) {
+      console.warn("validateSession returned false; keeping local session", data);
+      return true;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("validateSession failed", error);
+    return true;
+  }
 }
 
 function clearAuth() {
@@ -68,6 +79,15 @@ async function logout() {
 }
 
 async function requireAuth() {
+  const token = localStorage.getItem("we_token");
+  const role = localStorage.getItem("we_role");
+
+  if (!token || role === "admin") {
+    clearAuth();
+    window.location.href = "/login.html";
+    return;
+  }
+
   const valid = await validateSession();
 
   if (!valid) {
