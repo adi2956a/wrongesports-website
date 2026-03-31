@@ -1,24 +1,44 @@
+// =============================================
+// CORE - All requests go as GET to avoid CORS
+// =============================================
+
 async function apiGet(action, params = {}) {
-  params.action = action;
-  const url = `${CONFIG.API_URL}?${new URLSearchParams(params).toString()}`;
-  return (await fetch(url)).json();
+  try {
+    params.action = action;
+    const url = CONFIG.API_URL + "?" + new URLSearchParams(params).toString();
+    const res = await fetch(url, { method: "GET", redirect: "follow" });
+    const text = await res.text();
+    return JSON.parse(text);
+  } catch (err) {
+    console.error("apiGet error:", err);
+    return { success: false, error: err.message };
+  }
 }
 
+// All POST actions are also sent as GET to bypass CORS preflight
 async function apiPost(action, body = {}) {
-  body.action = action;
-  return (await fetch(CONFIG.API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  })).json();
+  try {
+    body.action = action;
+    const url = CONFIG.API_URL + "?" + new URLSearchParams(body).toString();
+    const res = await fetch(url, { method: "GET", redirect: "follow" });
+    const text = await res.text();
+    return JSON.parse(text);
+  } catch (err) {
+    console.error("apiPost error:", err);
+    return { success: false, error: err.message };
+  }
 }
+
+// =============================================
+// NAMED FUNCTIONS
+// =============================================
 
 function getTournaments(status) {
-  return apiGet("getTournaments", { status });
+  return apiGet("getTournaments", { status: status || "all" });
 }
 
 function getTournamentDetail(id, token) {
-  return apiGet("getTournamentDetail", { tournamentId: id, token });
+  return apiGet("getTournamentDetail", { tournamentId: id, token: token || "" });
 }
 
 function registerTournament(token, tournamentId) {
@@ -35,6 +55,10 @@ function getProfile(userId) {
 
 function getMatchHistory(userId) {
   return apiGet("getMatchHistory", { userId });
+}
+
+function getRegisteredTournaments(token) {
+  return apiGet("getRegisteredTournaments", { token });
 }
 
 function submitChangeRequest(token, field, newValue, reason) {
@@ -54,43 +78,45 @@ function adminAddTournament(data) {
 }
 
 function adminUpdateTournament(id, data) {
-  return apiPost("updateTournament", { adminSecret: CONFIG.ADMIN_SECRET, tournamentId: id, ...data });
+  return apiPost("updateTournament", {
+    adminSecret: CONFIG.ADMIN_SECRET, tournamentId: id, ...data
+  });
 }
 
 function adminAddRoomDetails(id, roomId, roomPass) {
-  return apiPost("addRoomDetails", { adminSecret: CONFIG.ADMIN_SECRET, tournamentId: id, roomId, roomPass });
+  return apiPost("addRoomDetails", {
+    adminSecret: CONFIG.ADMIN_SECRET, tournamentId: id, roomId, roomPass
+  });
 }
 
 function adminAddMatchResult(tournamentId, results) {
-  return apiPost("addMatchResult", { adminSecret: CONFIG.ADMIN_SECRET, tournamentId, results });
+  // results array needs special handling - encode as JSON string
+  return apiGet("addMatchResult", {
+    adminSecret: CONFIG.ADMIN_SECRET,
+    tournamentId,
+    results: JSON.stringify(results)
+  });
 }
 
 function adminGetChangeRequests(status) {
-  return apiGet("getChangeRequests", { adminSecret: CONFIG.ADMIN_SECRET, status });
+  return apiGet("getChangeRequests", {
+    adminSecret: CONFIG.ADMIN_SECRET, status: status || "all"
+  });
 }
 
 function adminResolveChangeRequest(reqId, decision) {
-  return apiPost("resolveChangeRequest", { adminSecret: CONFIG.ADMIN_SECRET, reqId, decision });
+  return apiPost("resolveChangeRequest", {
+    adminSecret: CONFIG.ADMIN_SECRET, requestId: reqId, status: decision
+  });
 }
 
-function adminPostAnnouncement(title, body) {
-  return apiPost("postAnnouncement", { adminSecret: CONFIG.ADMIN_SECRET, title, body });
+function adminPostAnnouncement(title, message) {
+  return apiPost("postAnnouncement", {
+    adminSecret: CONFIG.ADMIN_SECRET, title, message
+  });
 }
 
-function getRegisteredTournaments(token) {
-  return apiGet("getRegisteredTournaments", { token });
-}
-
-// Special function for actions that need to bypass CORS
-// Sends data as GET params instead of POST body
+// Step 2 still calls this helper from admin/index.html, so keep it as a GET alias.
 function apiGetPost(action, params = {}) {
-  params.action = action;
-  const url = CONFIG.API_URL + "?" + new URLSearchParams(params).toString();
-  return fetch(url, {
-    method: "GET",
-    redirect: "follow"
-  })
-    .then((r) => r.text())
-    .then((t) => JSON.parse(t))
-    .catch((err) => ({ success: false, error: err.message }));
+  return apiGet(action, params);
 }
