@@ -133,6 +133,9 @@ async function loadAdminPanel() {
     `;
 
     const playersBody = document.getElementById("playersTableBody");
+    const resultsBody = document.getElementById("matchResultsTableBody");
+    const submitResultsBtn = document.getElementById("submitMatchResultsBtn");
+    const resultsMessage = document.getElementById("matchResultsMessage");
     const renderPlayers = (term = "") => {
       const filtered = users.filter((user) => adminPick(user, ["playerName", "PlayerName", "name"], "").toLowerCase().includes(term.toLowerCase()));
       playersBody.innerHTML = filtered.map(playerRow).join("");
@@ -222,28 +225,44 @@ async function loadAdminPanel() {
     document.getElementById("resultsTournamentSelect")?.addEventListener("change", async (event) => {
       const targetId = event.target.value;
       const body = document.getElementById("matchResultsTableBody");
+      if (submitResultsBtn) submitResultsBtn.disabled = true;
+      if (resultsMessage) resultsMessage.textContent = "";
       if (!targetId) {
         body.innerHTML = "";
         return;
       }
       const detailRes = await getTournamentDetail(targetId, localStorage.getItem("we_token") || "");
       const players = normalizeArray(detailRes.players || detailRes.registeredPlayers || detailRes.registrations);
+      if (!players.length) {
+        body.innerHTML = '<tr><td colspan="3">No registered players were returned for this tournament.</td></tr>';
+        if (resultsMessage) {
+          resultsMessage.textContent = "Select a tournament that has registered players, or update the backend to return registrations in tournament detail.";
+          resultsMessage.style.color = "#ff8c87";
+        }
+        return;
+      }
       body.innerHTML = players.map((player, index) => `
-        <tr>
+        <tr data-user-id="${escapeHtml(adminPick(player, ["userId", "UserID", "playerId", "id"], ""))}">
           <td>${escapeHtml(adminPick(player, ["playerName", "PlayerName", "name"], `Player ${index + 1}`))}</td>
           <td><input type="number" min="0" name="kills_${index}"></td>
           <td><input type="number" min="1" name="rank_${index}"></td>
         </tr>
       `).join("");
+      if (submitResultsBtn) submitResultsBtn.disabled = false;
     });
 
     document.getElementById("matchResultsForm")?.addEventListener("submit", async (event) => {
       event.preventDefault();
       const tournamentIdValue = document.getElementById("resultsTournamentSelect").value;
       const rows = Array.from(document.querySelectorAll("#matchResultsTableBody tr"));
+      if (!tournamentIdValue || !rows.length || rows[0].children.length < 3) {
+        document.getElementById("matchResultsMessage").textContent = "Load a tournament with registered players first.";
+        return;
+      }
       const results = rows.map((row) => {
         const cells = row.querySelectorAll("td");
         return {
+          userId: row.dataset.userId || "",
           playerName: cells[0].textContent,
           kills: cells[1].querySelector("input").value,
           rank: cells[2].querySelector("input").value
