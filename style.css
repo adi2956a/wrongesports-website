@@ -115,7 +115,14 @@ p {
 
 .btn,
 button,
-.button-link {
+.button-link,
+a.btn-primary,
+a.btn-secondary,
+a.btn-accent,
+a.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 44px;
   padding: 0.85rem 1.25rem;
   border-radius: 4px;
@@ -129,20 +136,23 @@ button,
 
 .btn-primary,
 button.btn-primary,
-.button-link.btn-primary {
+.button-link.btn-primary,
+a.btn-primary {
   background: var(--primary);
   color: #fff;
 }
 
 .btn-primary:hover,
 button.btn-primary:hover,
-.button-link.btn-primary:hover {
+.button-link.btn-primary:hover,
+a.btn-primary:hover {
   filter: brightness(1.1);
 }
 
 .btn-secondary,
 button.btn-secondary,
-.button-link.btn-secondary {
+.button-link.btn-secondary,
+a.btn-secondary {
   background: transparent;
   border-color: var(--border);
   color: var(--text);
@@ -150,17 +160,20 @@ button.btn-secondary,
 
 .btn-secondary:hover,
 button.btn-secondary:hover,
-.button-link.btn-secondary:hover {
+.button-link.btn-secondary:hover,
+a.btn-secondary:hover {
   border-color: var(--text);
 }
 
-.btn-accent {
+.btn-accent,
+a.btn-accent {
   background: transparent;
   color: var(--accent);
   border-color: rgba(0, 212, 255, 0.4);
 }
 
-.btn-success {
+.btn-success,
+a.btn-success {
   background: transparent;
   color: var(--success);
   border-color: rgba(0, 255, 136, 0.35);

@@ -37,6 +37,22 @@ function normalizeArray(payload) {
     return payload.players;
   }
 
+  if (Array.isArray(payload?.users)) {
+    return payload.users;
+  }
+
+  if (Array.isArray(payload?.requests)) {
+    return payload.requests;
+  }
+
+  if (Array.isArray(payload?.matches)) {
+    return payload.matches;
+  }
+
+  if (Array.isArray(payload?.announcements)) {
+    return payload.announcements;
+  }
+
   return [];
 }
 
