@@ -75,6 +75,7 @@
 
       if (data.success && data.role === "admin") {
         localStorage.setItem("we_token", data.token);
+        localStorage.setItem("we_admin_token", data.token);
         localStorage.setItem("we_userId", data.userId);
         localStorage.setItem("we_playerName", data.playerName);
         localStorage.setItem("we_role", data.role);

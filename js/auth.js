@@ -1,38 +1,21 @@
 async function register(email, password, playerName, ffuid, teamName, discordId) {
   const hash = CryptoJS.SHA256(password).toString();
-  const response = await fetch(CONFIG.API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "register",
-      email,
-      passwordHash: hash,
-      playerName,
-      ffuid,
-      teamName,
-      discordId
-    })
+  return apiPost("register", {
+    email,
+    passwordHash: hash,
+    playerName,
+    ffuid,
+    teamName,
+    discordId
   });
-
-  return response.json();
 }
 
 async function login(email, password) {
   const passwordHash = CryptoJS.SHA256(password).toString();
-  const response = await fetch(CONFIG.API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "login",
-      email,
-      passwordHash
-    })
+  const data = await apiPost("login", {
+    email,
+    passwordHash
   });
-  const data = await response.json();
 
   if (data.success) {
     localStorage.setItem("we_token", data.token || "");
@@ -64,30 +47,23 @@ async function validateSession() {
 
 function clearAuth() {
   localStorage.removeItem("we_token");
+  localStorage.removeItem("we_admin_token");
   localStorage.removeItem("we_userId");
   localStorage.removeItem("we_playerName");
   localStorage.removeItem("we_role");
 }
 
 async function logout() {
+  const role = localStorage.getItem("we_role");
   const token = localStorage.getItem("we_token");
 
   try {
-    await fetch(CONFIG.API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action: "logout",
-        token
-      })
-    });
+    await apiPost("logout", { token });
   } catch (error) {
     console.error("Logout request failed", error);
   } finally {
     clearAuth();
-    window.location.href = "/login.html";
+    window.location.href = role === "admin" ? "/admin/index.html" : "/login.html";
   }
 }
 
@@ -100,17 +76,18 @@ async function requireAuth() {
 }
 
 async function requireAdmin() {
-  const valid = await validateSession();
   const role = localStorage.getItem("we_role");
+  const adminToken = localStorage.getItem("we_admin_token") || localStorage.getItem("we_token");
 
-  if (!valid || role !== "admin") {
+  if (role !== "admin" || !adminToken) {
+    clearAuth();
     window.location.href = "/admin/index.html";
   }
 }
 
 function getUser() {
   return {
-    token: localStorage.getItem("we_token"),
+    token: localStorage.getItem("we_admin_token") || localStorage.getItem("we_token"),
     userId: localStorage.getItem("we_userId"),
     playerName: localStorage.getItem("we_playerName"),
     role: localStorage.getItem("we_role")
