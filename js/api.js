@@ -80,3 +80,17 @@ function adminPostAnnouncement(title, body) {
 function getRegisteredTournaments(token) {
   return apiGet("getRegisteredTournaments", { token });
 }
+
+// Special function for actions that need to bypass CORS
+// Sends data as GET params instead of POST body
+function apiGetPost(action, params = {}) {
+  params.action = action;
+  const url = CONFIG.API_URL + "?" + new URLSearchParams(params).toString();
+  return fetch(url, {
+    method: "GET",
+    redirect: "follow"
+  })
+    .then((r) => r.text())
+    .then((t) => JSON.parse(t))
+    .catch((err) => ({ success: false, error: err.message }));
+}
