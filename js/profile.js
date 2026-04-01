@@ -19,6 +19,8 @@ async function loadPublicProfile() {
     }
 
     const verified = String(pick(profile, ["verified", "Verified"], "false")).toLowerCase() === "true";
+    const roleRaw = String(pick(profile, ["role", "Role"], "player")).toLowerCase();
+    const roleLabel = roleRaw === "admin" ? "Admin" : "Player";
     container.innerHTML = `
       <div class="stack">
         <section class="profile-hero card">
@@ -30,6 +32,7 @@ async function loadPublicProfile() {
             ${verified ? renderVerifiedBadge() : '<span class="status-badge status-pending">Pending verification</span>'}
           </div>
           <div class="label-grid">
+            <div class="label-row"><p>Role</p><strong>${escapeHtml(roleLabel)}</strong></div>
             <div class="label-row"><p>FFUID</p><strong>${escapeHtml(pick(profile, ["ffuid", "FFUID"], "N/A"))}</strong></div>
             <div class="label-row"><p>Team</p><strong>${escapeHtml(pick(profile, ["teamName", "TeamName"], "Solo"))}</strong></div>
             <div class="label-row"><p>Discord</p><strong>${escapeHtml(pick(profile, ["discordId", "DiscordID"], "N/A"))}</strong></div>

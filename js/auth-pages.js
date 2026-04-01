@@ -16,13 +16,16 @@ function setButtonLoading(button, loading, text) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const currentRole = localStorage.getItem("we_role");
+  const dashboardRoute = currentRole === "admin" ? "/admin/panel" : "/dashboard";
+
   const registerForm = document.getElementById("registerForm");
   const loginForm = document.getElementById("loginForm");
   const forgotModal = document.getElementById("forgotModal");
 
   if (registerForm) {
     if (localStorage.getItem("we_token")) {
-      window.location.href = "/dashboard";
+      window.location.href = dashboardRoute;
       return;
     }
 
@@ -84,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (loginForm) {
     if (localStorage.getItem("we_token")) {
-      window.location.href = "/dashboard";
+      window.location.href = dashboardRoute;
       return;
     }
 
@@ -114,7 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.success) {
           const returnUrl = localStorage.getItem("returnUrl");
           localStorage.removeItem("returnUrl");
-          window.location.href = returnUrl || "/dashboard";
+          const roleRoute = response.role === "admin" ? "/admin/panel" : "/dashboard";
+          window.location.href = returnUrl || roleRoute;
         } else {
           errorBox.textContent = response.message || "Invalid email or password.";
         }

@@ -12,16 +12,33 @@ async function register(email, password, playerName, ffuid, teamName, discordId)
 
 async function login(email, password) {
   const passwordHash = CryptoJS.SHA256(password).toString();
-  const data = await apiPost("login", {
+  let data = await apiPost("login", {
     email,
     passwordHash
   });
+
+  // Allow admins to use the same login form even if backend separates actions.
+  if (!data.success) {
+    const adminData = await apiPost("adminLogin", { email, passwordHash });
+    if (adminData.success) {
+      data = {
+        ...adminData,
+        role: "admin"
+      };
+    }
+  }
 
   if (data.success) {
     localStorage.setItem("we_token", data.token || "");
     localStorage.setItem("we_userId", data.userId || "");
     localStorage.setItem("we_playerName", data.playerName || "");
-    localStorage.setItem("we_role", data.role || "player");
+    const role = data.role || "player";
+    localStorage.setItem("we_role", role);
+    if (role === "admin") {
+      localStorage.setItem("we_admin_token", data.token || "");
+    } else {
+      localStorage.removeItem("we_admin_token");
+    }
   }
 
   return data;
