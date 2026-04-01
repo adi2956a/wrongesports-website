@@ -133,12 +133,21 @@ function renderNavAuth() {
 
   const token = localStorage.getItem("we_token");
   const role = localStorage.getItem("we_role");
+  const playerName = getPlayerName();
+  const initial = escapeHtml((playerName || "P").charAt(0).toUpperCase());
+  const roleLabel = role === "admin" ? "Admin access" : "Player dashboard";
 
   if (token) {
     const dashboardHref = role === "admin" ? "/admin/panel.html" : "/dashboard.html";
     navAuth.innerHTML = `
-      <span class="nav-user">?? ${escapeHtml(getPlayerName())}</span>
-      <a href="${dashboardHref}" class="btn-secondary">Dashboard</a>
+      <div class="nav-user-card">
+        <span class="nav-user-avatar">${initial}</span>
+        <span class="nav-user-copy">
+          <strong>${escapeHtml(playerName)}</strong>
+          <small>${roleLabel}</small>
+        </span>
+      </div>
+      <a href="${dashboardHref}" class="btn-secondary nav-dashboard-link">Dashboard</a>
       <button type="button" class="btn-secondary" id="navLogoutBtn">Logout</button>
     `;
     const logoutBtn = document.getElementById("navLogoutBtn");
@@ -148,6 +157,75 @@ function renderNavAuth() {
       <a href="/login.html" class="btn-secondary">Login</a>
       <a href="/register.html" class="btn-primary">Register</a>
     `;
+  }
+}
+
+function renderVerifiedBadge(label = "Verified") {
+  return `
+    <span class="verified-badge" aria-label="${escapeHtml(label)} player">
+      <span class="verified-badge-icon"></span>
+      ${escapeHtml(label)}
+    </span>
+  `;
+}
+
+function createFakeLoader(title, lines = 3) {
+  return `
+    <div class="loading-card fake-loader-card">
+      <div class="fake-loader-head">
+        <p>${escapeHtml(title)}</p>
+        <span class="fake-loader-percent">0 - 100</span>
+      </div>
+      <div class="fake-loader-track"><span class="fake-loader-bar"></span></div>
+      <div class="fake-loader-scale">
+        <span>0</span>
+        <span>25</span>
+        <span>50</span>
+        <span>75</span>
+        <span>100</span>
+      </div>
+      <div class="stack">
+        ${createSkeletonCards(lines, '<div class="skeleton" style="height:18px;"></div>')}
+      </div>
+    </div>
+  `;
+}
+
+function bindScrollTabs(buttonSelector, panelSelector) {
+  const buttons = Array.from(document.querySelectorAll(buttonSelector));
+  const panels = Array.from(document.querySelectorAll(panelSelector));
+  if (!buttons.length || !panels.length) return;
+
+  const activate = (value) => {
+    buttons.forEach((button) => {
+      button.classList.toggle("active", button.dataset.tab === value);
+    });
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = panels.find((panel) => panel.dataset.tab === button.dataset.tab);
+      if (!target) return;
+      activate(button.dataset.tab);
+      const navHeight = document.querySelector(".navbar")?.offsetHeight || 0;
+      const extraOffset = 18;
+      const top = target.getBoundingClientRect().top + window.scrollY - navHeight - extraOffset;
+      window.scrollTo({ top, behavior: "smooth" });
+    });
+  });
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) activate(visible.target.dataset.tab);
+    }, {
+      threshold: [0.2, 0.5, 0.8],
+      rootMargin: "-120px 0px -45% 0px"
+    });
+
+    panels.forEach((panel) => observer.observe(panel));
   }
 }
 

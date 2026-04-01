@@ -1,0 +1,841 @@
+Here's your complete website map and file structure reference document:
+
+---
+
+# WrongEsports — Complete Website Bible
+
+## PART 1 — Full File & Folder Structure
+
+```
+
+wrongesports-website/                    ← ROOT (GitHub repo)
+
+│
+
+├── CNAME                                ← esports.onlyaadi.in
+
+├── README.md                            ← project description
+
+│
+
+├── index.html                           ← Home page
+
+├── tournaments.html                     ← All tournaments list
+
+├── tournament-detail.html               ← Single tournament page
+
+├── leaderboard.html                     ← Player rankings
+
+├── teams.html                           ← Team directory
+
+├── media.html                           ← Videos \& screenshots
+
+├── register.html                        ← New user registration
+
+├── login.html                           ← User login
+
+├── dashboard.html                       ← Logged-in user area
+
+├── profile.html                         ← Public player profile
+
+├── help.html                            ← Help \& FAQ
+
+├── 404.html                             ← Not found page
+
+│
+
+├── admin/                               ← Admin only area
+
+│   ├── index.html                       ← Admin login page
+
+│   └── panel.html                       ← Admin control panel
+
+│
+
+├── css/
+
+│   ├── style.css                        ← Global design system
+
+│   ├── dashboard.css                    ← Dashboard specific styles
+
+│   └── admin.css                        ← Admin panel styles
+
+│
+
+├── js/
+
+│   ├── config.js                        ← API URL \& constants
+
+│   ├── auth.js                          ← Login/register/session
+
+│   ├── api.js                           ← All API call functions
+
+│   ├── home.js                          ← Home page logic
+
+│   ├── tournaments.js                   ← Tournaments page logic
+
+│   ├── leaderboard.js                   ← Leaderboard logic
+
+│   ├── dashboard.js                     ← Dashboard logic
+
+│   └── admin.js                         ← Admin panel logic
+
+│
+
+├── images/
+
+│   ├── logo.png                         ← Site logo
+
+│   ├── og-banner.png                    ← Social share image
+
+│   └── banners/                         ← Tournament banners
+
+│
+
+└── assets/
+
+&nbsp;   └── fonts/                           ← Local fonts if any
+
+```
+
+---
+
+## PART 2 — Google Sheets Database Map
+
+```
+
+SPREADSHEET NAME: WrongEsports\_DB
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+TAB 1: Users
+
+┌─────────┬───────────────────────┬──────────────┬────────────┬────────────┬──────────┬───────────┬──────────┬────────┬─────────────┐
+
+│ UserID  │ Email                 │ PasswordHash │ PlayerName │ FFUID      │ TeamName │ DiscordID │ Verified │ Role   │ CreatedAt   │
+
+│ USR001  │ test@wrongesports.com │ (hash)       │ TestPlayer │ 1234567890 │ TestTeam │ user#0000 │ FALSE    │ player │ 2024-01-01  │
+
+│ ADM001  │ admin@wrongesports.com│ (hash)       │ Admin      │ 0000000000 │ WE Staff │ admin#000 │ TRUE     │ admin  │ 2024-01-01  │
+
+└─────────┴───────────────────────┴──────────────┴────────────┴────────────┴──────────┴───────────┴──────────┴────────┴─────────────┘
+
+Role values: "player" or "admin"
+
+Verified: TRUE or FALSE
+
+IMPORTANT: PasswordHash is SHA-256 of actual password. Never store plain text.
+
+
+
+TAB 2: Sessions
+
+┌──────────────────────────────────┬─────────┬─────────────┬─────────────┐
+
+│ SessionToken                     │ UserID  │ CreatedAt   │ ExpiresAt   │
+
+│ xK9pAbCd... (32 chars)          │ USR001  │ 2024-01-01  │ 2024-01-08  │
+
+└──────────────────────────────────┴─────────┴─────────────┴─────────────┘
+
+Auto-managed by Apps Script. Do not edit manually.
+
+ExpiresAt = CreatedAt + 7 days.
+
+Old sessions accumulate here — safe to delete rows older than 30 days.
+
+
+
+TAB 3: Tournaments
+
+┌──────────┬──────────────────┬──────────┬────────────┬────────┬───────────┬────────────┬────────────┬──────────┬────────┬──────────┬───────────────────┬─────────┬───────────┐
+
+│ TournID  │ Name             │ Game     │ Date       │ Time   │ PrizePool │ TotalSlots │ FilledSlots│ Status   │ RoomID │ RoomPass │ Rules             │ MapName │ BannerURL │
+
+│ TOUR001  │ Season 1 Launch  │ Free Fire│ 2024-01-15 │ 8:00PM │ ₹500      │ 12         │ 0          │ upcoming │        │          │ No teaming...     │ Bermuda │           │
+
+└──────────┴──────────────────┴──────────┴────────────┴────────┴───────────┴────────────┴────────────┴──────────┴────────┴──────────┴───────────────────┴─────────┴───────────┘
+
+Status flow: upcoming → ongoing → past
+
+RoomID and RoomPass: admin fills these before match starts
+
+BannerURL: direct image link for tournament card banner
+
+
+
+TAB 4: Registrations
+
+┌─────────┬──────────┬─────────┬────────────┬──────────┬──────────────┐
+
+│ RegID   │ TournID  │ UserID  │ PlayerName │ TeamName │ RegisteredAt │
+
+│ REG001  │ TOUR001  │ USR001  │ TestPlayer │ TestTeam │ 2024-01-10   │
+
+└─────────┴──────────┴─────────┴────────────┴──────────┴──────────────┘
+
+One row per player per tournament registration.
+
+Used to check if a player is registered (to show room details).
+
+
+
+TAB 5: Matches
+
+┌──────────┬──────────┬──────────┬────────────┬───────┬──────┬────────────┐
+
+│ MatchID  │ TournID  │ PlayerID │ PlayerName │ Kills │ Rank │ Date       │
+
+│ MATCH001 │ TOUR001  │ USR001   │ TestPlayer │ 8     │ 1    │ 2024-01-15 │
+
+└──────────┴──────────┴──────────┴────────────┴───────┴──────┴────────────┘
+
+Admin enters results here via admin panel Match Results tab.
+
+Rank = 1 means winner. Drives TotalWins in PlayerStats.
+
+
+
+TAB 6: PlayerStats
+
+┌─────────┬────────────┬──────────────┬────────────┬───────────┬──────┐
+
+│ PlayerID│ PlayerName │ TotalMatches │ TotalKills │ TotalWins │ KD   │
+
+│ USR001  │ TestPlayer │ 5            │ 22         │ 2         │ 7.33 │
+
+└─────────┴────────────┴──────────────┴────────────┴───────────┴──────┘
+
+Auto-updated by Apps Script when admin submits match results.
+
+KD formula: TotalKills / max(TotalMatches - TotalWins, 1)
+
+This drives the Leaderboard page.
+
+
+
+TAB 7: Teams
+
+┌─────────┬──────────┬───────────┬─────────────┬─────────┬─────────────┬─────────────┐
+
+│ TeamID  │ TeamName │ CaptainID │ CaptainName │ LogoURL │ TotalPoints │ MemberCount │
+
+└─────────┴──────────┴───────────┴─────────────┴─────────┴─────────────┴─────────────┘
+
+Currently populated manually by admin.
+
+Teams page groups players by TeamName from Users sheet as fallback.
+
+
+
+TAB 8: ChangeRequests
+
+┌─────────┬─────────┬────────────┬────────────┬──────────┬────────┬─────────┬─────────────┐
+
+│ ReqID   │ UserID  │ PlayerName │ Field      │ NewValue │ Reason │ Status  │ SubmittedAt │
+
+│ REQ001  │ USR001  │ TestPlayer │ TeamName   │ NewTeam  │ Moved  │ pending │ 2024-01-12  │
+
+└─────────┴─────────┴────────────┴────────────┴──────────┴────────┴─────────┴─────────────┘
+
+Status values: pending / approved / rejected
+
+Field values: PlayerName / TeamName / DiscordID / InGameName
+
+Admin approves or rejects in admin panel Change Requests tab.
+
+On approval: Apps Script automatically updates Users sheet.
+
+
+
+TAB 9: Announcements
+
+┌────────┬───────────────┬──────────────────┬────────────┬────────────────┬───────────────────┐
+
+│ ID     │ Title         │ Body             │ Date       │ TelegramPosted │ TelegramMessageID │
+
+│ ANN001 │ New Tournament│ Season 1 is here │ 2024-01-10 │ TRUE           │ 12345             │
+
+└────────┴───────────────┴──────────────────┴────────────┴────────────────┴───────────────────┘
+
+Created automatically when admin posts from admin panel.
+
+TelegramPosted = TRUE means it was successfully sent to Telegram group.
+
+
+
+TAB 10: MediaLinks
+
+┌────────┬─────────┬──────────────────────────┬──────────────────┬────────────┐
+
+│ ID     │ Type    │ URL                       │ Caption          │ Date       │
+
+│ MED001 │ youtube │ https://youtube.com/...   │ Season 1 Finals  │ 2024-01-15 │
+
+└────────┴─────────┴──────────────────────────┴──────────────────┴────────────┘
+
+Type values: youtube / image / clip
+
+Currently media.html uses hardcoded links.
+
+Future: load dynamically from this sheet.
+
+```
+
+---
+
+## PART 3 — Backend API Map (Google Apps Script)
+
+```
+
+FILE: Code.gs (Google Apps Script)
+
+DEPLOYED AS: Web App — Execute as Me, Access: Anyone
+
+URL: stored in js/config.js as CONFIG.API\_URL
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ALL API ENDPOINTS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+METHOD  ACTION                  WHO USES IT           SHEET TOUCHED
+
+──────  ──────────────────────  ────────────────────  ──────────────────
+
+GET     validateSession         every protected page  Sessions, Users
+
+GET     getTournaments          tournaments.html       Tournaments
+
+GET     getTournamentDetail     tournament-detail.html Tournaments, Registrations
+
+GET     getRegisteredTournaments dashboard.html        Registrations, Tournaments
+
+GET     getLeaderboard          leaderboard.html       PlayerStats (cached 5min)
+
+GET     getProfile              profile.html           Users, PlayerStats
+
+GET     getMatchHistory         dashboard.html         Matches
+
+GET     adminGetUsers           admin panel            Users
+
+GET     getChangeRequests       admin panel            ChangeRequests
+
+
+
+POST    register                register.html          Users
+
+POST    login                   login.html             Users, Sessions
+
+POST    logout                  navbar logout          Sessions
+
+POST    registerTournament      tournament-detail.html Registrations, Tournaments
+
+POST    submitChangeRequest     dashboard.html         ChangeRequests
+
+POST    adminLogin              admin/index.html       Users, Sessions
+
+POST    adminVerifyPlayer       admin panel            Users
+
+POST    addTournament           admin panel            Tournaments, Announcements → Telegram
+
+POST    updateTournament        admin panel            Tournaments → Telegram
+
+POST    addRoomDetails          admin panel            Tournaments → Telegram
+
+POST    addMatchResult          admin panel            Matches, PlayerStats → Telegram
+
+POST    resolveChangeRequest    admin panel            ChangeRequests, Users
+
+POST    postAnnouncement        admin panel            Announcements → Telegram
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TELEGRAM AUTO-TRIGGER MAP
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+Admin Action              → Telegram Message Sent
+
+──────────────────────    ──────────────────────────────────────────────
+
+Add Tournament            → "🏆 New Tournament! Name, Date, Prize, Slots"
+
+Update Status → ongoing   → "🎮 Tournament is now LIVE!"
+
+Update Status → past      → "✅ Tournament Ended"
+
+Add Room Details          → "🔑 Room Details Ready! Login to see them."
+
+Submit Match Results      → "🏆 Match Results! Winner: Name (X kills)"
+
+Post Announcement         → "📢 Title + Body"
+
+```
+
+---
+
+## PART 4 — Frontend Page Map
+
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PAGE              URL                          AUTH    JS FILE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Home              /index.html                  None    home.js
+
+Tournaments       /tournaments.html            None    tournaments.js
+
+Tournament Detail /tournament-detail.html?id= None\*   tournaments.js
+
+Leaderboard       /leaderboard.html            None    leaderboard.js
+
+Teams             /teams.html                  None    inline
+
+Media             /media.html                  None    inline
+
+Register          /register.html               None    inline
+
+Login             /login.html                  None    inline
+
+Dashboard         /dashboard.html              LOGIN   dashboard.js
+
+Profile (public)  /profile.html?userId=        None    inline
+
+Help              /help.html                   None    inline
+
+404               /404.html                    None    inline
+
+Admin Login       /admin/index.html            None    inline
+
+Admin Panel       /admin/panel.html            ADMIN   admin.js
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+\* Room ID/Pass only shown if logged in AND registered for that tournament
+
+```
+
+---
+
+## PART 5 — Admin Panel Tab Map
+
+```
+
+ADMIN PANEL — /admin/panel.html
+
+Requires: Role = "admin" in Users sheet
+
+
+
+TAB               WHAT IT DOES                              API CALLED
+
+────────────────  ────────────────────────────────────────  ──────────────────────
+
+Dashboard         Shows counts: Players, Tournaments,       adminGetUsers,
+
+&nbsp;                 Pending Requests, Active Tournaments      getTournaments
+
+
+
+Players           Lists all users. Verify players.          adminGetUsers
+
+&nbsp;                 Click row = view full profile             adminVerifyPlayer
+
+
+
+Tournaments       Add new tournament (auto Telegram)        addTournament
+
+&nbsp;                 Edit tournament details                   updateTournament
+
+&nbsp;                 Change status (auto Telegram)             updateTournament
+
+
+
+Room Details      Select ongoing tournament                 addRoomDetails
+
+&nbsp;                 Enter Room ID + Password (auto Telegram)
+
+
+
+Match Results     Select tournament → enter kills/rank      addMatchResult
+
+&nbsp;                 per player → submit (auto Telegram        
+
+&nbsp;                 announces winner)
+
+
+
+Change Requests   View pending/approved/rejected requests   getChangeRequests
+
+&nbsp;                 Approve = applies change to Users sheet   resolveChangeRequest
+
+&nbsp;                 Reject = marks as rejected
+
+
+
+Announcements     Write title + body                        postAnnouncement
+
+&nbsp;                 Posts to Telegram automatically
+
+&nbsp;                 Shows history of past announcements
+
+```
+
+---
+
+## PART 6 — User Journey Map
+
+```
+
+NEW VISITOR
+
+&nbsp;   │
+
+&nbsp;   ▼
+
+index.html (Home)
+
+&nbsp;   │
+
+&nbsp;   ├── See tournaments → tournaments.html
+
+&nbsp;   │       │
+
+&nbsp;   │       └── Click tournament → tournament-detail.html
+
+&nbsp;   │               │
+
+&nbsp;   │               └── Click Register → (not logged in?)
+
+&nbsp;   │                       │
+
+&nbsp;   │                       ▼
+
+&nbsp;   │               login.html ──────────── register.html
+
+&nbsp;   │                       │                    │
+
+&nbsp;   │                       └────────────────────┘
+
+&nbsp;   │                               │ (logged in)
+
+&nbsp;   │                               ▼
+
+&nbsp;   │               tournament-detail.html (register for tournament)
+
+&nbsp;   │
+
+&nbsp;   ├── See rankings → leaderboard.html
+
+&nbsp;   │       │
+
+&nbsp;   │       └── Click player row → profile.html?userId=XXX
+
+&nbsp;   │
+
+&nbsp;   ├── See teams → teams.html
+
+&nbsp;   │
+
+&nbsp;   ├── See media → media.html
+
+&nbsp;   │
+
+&nbsp;   └── Need help → help.html
+
+
+
+LOGGED IN USER
+
+&nbsp;   │
+
+&nbsp;   ▼
+
+dashboard.html
+
+&nbsp;   ├── Profile tab      → view stats, info, verified badge
+
+&nbsp;   ├── My Tournaments   → see registered tournaments, room details if ongoing
+
+&nbsp;   ├── Match History    → see kills, rank per match
+
+&nbsp;   └── Change Request   → request profile update (admin approves)
+
+
+
+ADMIN USER
+
+&nbsp;   │
+
+&nbsp;   ▼
+
+admin/index.html (admin login)
+
+&nbsp;   │
+
+&nbsp;   ▼
+
+admin/panel.html
+
+&nbsp;   ├── Dashboard        → overview stats
+
+&nbsp;   ├── Players          → manage + verify players
+
+&nbsp;   ├── Tournaments      → add/edit/update status
+
+&nbsp;   ├── Room Details     → post room ID + password
+
+&nbsp;   ├── Match Results    → enter kills + rank after match
+
+&nbsp;   ├── Change Requests  → approve or reject profile changes
+
+&nbsp;   └── Announcements    → post to Telegram
+
+```
+
+---
+
+## PART 7 — Config & Secrets Map
+
+```
+
+FILE: js/config.js
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+VARIABLE            VALUE                          WHERE TO GET IT
+
+──────────────────  ─────────────────────────────  ────────────────────────────
+
+API\_URL             Apps Script Web App URL        Apps Script → Deploy → Copy URL
+
+SITE\_URL            https://esports.onlyaadi.in   Your domain
+
+DISCORD\_INVITE      https://discord.gg/XXXXX       Discord → Invite link
+
+TELEGRAM\_GROUP      https://t.me/XXXXX             Your Telegram group link
+
+ADMIN\_SECRET        Your chosen secret string      You create this, same in Code.gs
+
+
+
+FILE: Code.gs (Google Apps Script)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+VARIABLE              VALUE                        WHERE TO GET IT
+
+────────────────────  ───────────────────────────  ────────────────────────────
+
+SHEET\_ID              Google Sheet ID              Sheet URL between /d/ and /edit
+
+TELEGRAM\_BOT\_TOKEN    Bot token from BotFather     Telegram @BotFather → /newbot
+
+TELEGRAM\_CHANNEL\_ID   Group/channel ID             @userinfobot in your group
+
+ADMIN\_SECRET          Same as config.js            You create this string
+
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NEVER commit real values to GitHub.
+
+Use placeholder text in the repo.
+
+Fill real values only in your deployed files.
+
+```
+
+---
+
+## PART 8 — Data Flow Diagram
+
+```
+
+USER BROWSER
+
+&nbsp;    │
+
+&nbsp;    │ fetch() calls
+
+&nbsp;    ▼
+
+GOOGLE APPS SCRIPT (Code.gs)
+
+&nbsp;    │                    │
+
+&nbsp;    │ reads/writes        │ sends messages
+
+&nbsp;    ▼                    ▼
+
+GOOGLE SHEETS        TELEGRAM BOT API
+
+(WrongEsports\_DB)         │
+
+&nbsp;    │                    ▼
+
+&nbsp;    │              TELEGRAM GROUP
+
+&nbsp;    │              (your community)
+
+&nbsp;    │
+
+&nbsp;    └── 10 sheet tabs:
+
+&nbsp;        Users
+
+&nbsp;        Sessions
+
+&nbsp;        Tournaments
+
+&nbsp;        Registrations
+
+&nbsp;        Matches
+
+&nbsp;        PlayerStats
+
+&nbsp;        Teams
+
+&nbsp;        ChangeRequests
+
+&nbsp;        Announcements
+
+&nbsp;        MediaLinks
+
+
+
+GITHUB REPO
+
+&nbsp;    │
+
+&nbsp;    │ GitHub Pages
+
+&nbsp;    ▼
+
+esports.onlyaadi.in
+
+(HTML + CSS + JS files)
+
+```
+
+---
+
+## PART 9 — localStorage Keys (Browser)
+
+```
+
+KEY             VALUE                   SET BY          CLEARED BY
+
+──────────────  ──────────────────────  ──────────────  ──────────────
+
+we\_token        32-char session token   login()         logout() / clearAuth()
+
+we\_userId       USR001 format           login()         logout() / clearAuth()
+
+we\_playerName   player's display name   login()         logout() / clearAuth()
+
+we\_role         "player" or "admin"     login()         logout() / clearAuth()
+
+
+
+Pages that check these:
+
+&nbsp; dashboard.html  → requireAuth() → redirects to login if no token
+
+&nbsp; admin/panel.html → requireAdmin() → redirects if no token or role != admin
+
+&nbsp; navbar (all pages) → shows Login/Register OR PlayerName/Dashboard based on token
+
+```
+
+---
+
+## PART 10 — Quick Reference for New Managers
+
+```
+
+TASK                          WHERE TO DO IT
+
+────────────────────────────  ──────────────────────────────────────────
+
+Add a new tournament          Admin Panel → Tournaments → Add Tournament
+
+Start a tournament            Admin Panel → Tournaments → Change Status → ongoing
+
+Add room ID before match      Admin Panel → Room Details → select tournament → enter
+
+Enter results after match     Admin Panel → Match Results → select → fill kills/rank
+
+Verify a new player           Admin Panel → Players → find player → click Verify
+
+Approve profile change        Admin Panel → Change Requests → Approve
+
+Post an announcement          Admin Panel → Announcements → write → Post \& Send
+
+See all registered players    Admin Panel → Players tab
+
+Check leaderboard             Public page: esports.onlyaadi.in/leaderboard.html
+
+
+
+UPDATE APPS SCRIPT CODE       Google Sheets → Extensions → Apps Script
+
+&nbsp; After editing Code.gs:      Deploy → Manage Deployments → Edit → New Version → Deploy
+
+
+
+UPDATE WEBSITE FILES          VS Code → edit files → git push
+
+&nbsp; Changes go live in:         2-3 minutes on esports.onlyaadi.in
+
+
+
+ADD ADMIN ACCOUNT             Google Sheets → Users tab → add row manually
+
+&nbsp; Set Role column to:         admin
+
+&nbsp; Set PasswordHash to:        SHA-256 hash (generate in browser console)
+
+
+
+TELEGRAM BOT STOPPED WORKING  Check TELEGRAM\_BOT\_TOKEN in Code.gs still valid
+
+&nbsp;                             Make sure bot is still admin in your group
+
+
+
+GOOGLE SHEETS ID              Look at your sheet URL:
+
+&nbsp;                             docs.google.com/spreadsheets/d/SHEET\_ID\_HERE/edit
+
+&nbsp;                             Copy the long string between /d/ and /edit
+
+```
+
+---
+
+Print or save this document. Anyone who needs to manage WrongEsports in the future has everything they need in these 10 parts.
+
+
+email admin@wrongesports.com
+admin password adminwronghai

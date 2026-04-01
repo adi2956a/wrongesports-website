@@ -45,7 +45,7 @@ function playerRow(user) {
       <td>${escapeHtml(adminPick(user, ["teamName", "TeamName"], "Solo"))}</td>
       <td>${escapeHtml(adminPick(user, ["email", "Email"], "-"))}</td>
       <td>${verified ? '<span class="status-badge status-approved">Verified</span>' : '<span class="status-badge status-pending">Pending</span>'}</td>
-      <td>${verified ? '<span class="status-badge status-approved">Verified</span>' : `<button class="btn-primary verify-btn" data-user-id="${escapeHtml(adminPick(user, ["userId", "UserID", "id"], ""))}">Verify ?</button>`}</td>
+      <td>${verified ? '<span class="status-badge status-approved">Verified</span>' : `<button class="btn-primary verify-btn" data-user-id="${escapeHtml(adminPick(user, ["userId", "UserID", "id"], ""))}">Verify</button>`}</td>
     </tr>
   `;
 }
@@ -100,15 +100,21 @@ async function loadAdminPanel() {
   if (handledLogin || !document.getElementById("adminPanel")) return;
 
   await requireAdmin();
-  document.querySelectorAll(".admin-tab").forEach((button) => {
-    button.addEventListener("click", () => togglePanels(".admin-tab", ".admin-panel", button.dataset.tab));
-  });
+  document.getElementById("adminGreeting").textContent = `${getPlayerName()} Dashboard`;
+  document.getElementById("adminIdentityName").textContent = getPlayerName();
+  bindScrollTabs(".admin-tab", ".admin-panel");
 
   document.getElementById("adminLogoutBtn")?.addEventListener("click", () => {
     clearAuth();
     localStorage.removeItem("we_admin_token");
     window.location.href = "/admin/index.html";
   });
+
+  document.getElementById("adminStats").innerHTML = createFakeLoader("Loading dashboard stats", 3);
+  document.getElementById("playersTableBody").innerHTML = `<tr><td colspan="6">${createFakeLoader("Loading players", 2)}</td></tr>`;
+  document.getElementById("adminTournamentsTableBody").innerHTML = `<tr><td colspan="6">${createFakeLoader("Loading tournaments", 2)}</td></tr>`;
+  document.getElementById("changeRequestsTableBody").innerHTML = `<tr><td colspan="7">${createFakeLoader("Loading requests", 2)}</td></tr>`;
+  document.getElementById("announcementsTableBody").innerHTML = `<tr><td colspan="3">${createFakeLoader("Loading announcements", 2)}</td></tr>`;
 
   try {
     const [usersRes, tournamentsRes, requestsRes, announcementsRes] = await Promise.all([

@@ -7,7 +7,7 @@ async function loadPublicProfile() {
     return;
   }
 
-  setLoading(container, '<div class="loading-card"><div class="skeleton" style="height:280px;"></div></div>');
+  setLoading(container, createFakeLoader("Loading player profile", 4));
 
   try {
     const [profileRes, historyRes] = await Promise.all([getProfile(userId), getMatchHistory(userId)]);
@@ -22,7 +22,13 @@ async function loadPublicProfile() {
     container.innerHTML = `
       <div class="stack">
         <section class="profile-hero card">
-          <h1>${escapeHtml(pick(profile, ["playerName", "PlayerName", "name"], "Player"))} ${verified ? "?" : ""}</h1>
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Player profile</p>
+              <h1>${escapeHtml(pick(profile, ["playerName", "PlayerName", "name"], "Player"))}</h1>
+            </div>
+            ${verified ? renderVerifiedBadge() : '<span class="status-badge status-pending">Pending verification</span>'}
+          </div>
           <div class="label-grid">
             <div class="label-row"><p>FFUID</p><strong>${escapeHtml(pick(profile, ["ffuid", "FFUID"], "N/A"))}</strong></div>
             <div class="label-row"><p>Team</p><strong>${escapeHtml(pick(profile, ["teamName", "TeamName"], "Solo"))}</strong></div>

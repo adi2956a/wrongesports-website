@@ -9,7 +9,7 @@
 <body>
   <nav class="navbar">
     <a href="/index.html" class="nav-logo">Wrong<span>Esports</span></a>
-    <button class="nav-toggle" id="navToggle">?</button>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
     <div class="nav-links" id="navLinks">
       <a href="/index.html">Home</a>
       <a href="/tournaments.html">Tournaments</a>
@@ -33,6 +33,21 @@
           </div>
         </aside>
         <section class="dashboard-content stack">
+          <section class="section-topbar card">
+            <div>
+              <p class="section-topbar-kicker">Player space</p>
+              <h1 class="section-title" id="dashboardGreeting">Dashboard</h1>
+            </div>
+            <div class="section-topbar-meta">
+              <div class="identity-chip" id="dashboardIdentityChip">
+                <span class="identity-chip-mark">P</span>
+                <div>
+                  <strong id="dashboardUserName">Player</strong>
+                  <p>Profile control</p>
+                </div>
+              </div>
+            </div>
+          </section>
           <div class="dashboard-panel active" data-tab="profile" id="profilePanel"></div>
           <div class="dashboard-panel" data-tab="tournaments" id="myTournamentsPanel"></div>
           <div class="dashboard-panel" data-tab="history" id="matchHistoryPanel"></div>
@@ -50,3 +65,4 @@
   <script src="/js/dashboard.js"></script>
 </body>
 </html>
+
