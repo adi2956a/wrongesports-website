@@ -207,10 +207,9 @@ function bindScrollTabs(buttonSelector, panelSelector) {
       const target = panels.find((panel) => panel.dataset.tab === button.dataset.tab);
       if (!target) return;
       activate(button.dataset.tab);
-      const navHeight = document.querySelector(".navbar")?.offsetHeight || 0;
-      const extraOffset = 18;
-      const top = target.getBoundingClientRect().top + window.scrollY - navHeight - extraOffset;
-      window.scrollTo({ top, behavior: "smooth" });
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     });
   });
 
