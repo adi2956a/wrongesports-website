@@ -10,32 +10,6 @@ function closeModal(id) {
   document.getElementById(id)?.classList.remove("active");
 }
 
-async function handleAdminLogin() {
-  const form = document.getElementById("adminLoginForm");
-  if (!form) return false;
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const formData = new FormData(form);
-    const email = formData.get("email");
-    const password = formData.get("password");
-    const hash = CryptoJS.SHA256(password).toString();
-    const response = await apiPost("adminLogin", { email, hash, adminSecret: CONFIG.ADMIN_SECRET });
-    const message = document.getElementById("adminLoginMessage");
-    if (response.success) {
-      localStorage.setItem("we_token", response.token || "");
-      localStorage.setItem("we_admin_token", response.token || "");
-      localStorage.setItem("we_role", "admin");
-      localStorage.setItem("we_playerName", response.playerName || "Admin");
-      window.location.href = "/admin/panel";
-    } else {
-      message.textContent = "Access denied";
-    }
-  });
-
-  return true;
-}
-
 function playerRow(user) {
   const verified = String(adminPick(user, ["verified", "Verified"], "false")).toLowerCase() === "true";
   return `
@@ -96,8 +70,7 @@ function announcementRow(item) {
 }
 
 async function loadAdminPanel() {
-  const handledLogin = await handleAdminLogin();
-  if (handledLogin || !document.getElementById("adminPanel")) return;
+  if (!document.getElementById("adminPanel")) return;
 
   await requireAdmin();
   document.getElementById("adminGreeting").textContent = `${getPlayerName()} Dashboard`;
