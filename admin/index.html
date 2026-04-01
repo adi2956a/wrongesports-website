@@ -3,114 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login &mdash; WrongEsports</title>
+  <title>Redirecting | WrongEsports</title>
   <script>
-    if (window.location.pathname.endsWith("/admin/index.html")) {
-      window.history.replaceState({}, "", "/admin" + window.location.search + window.location.hash);
-    }
+    localStorage.setItem("returnUrl", "/admin/panel");
+    window.location.replace("/login");
   </script>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
-
-<div class="admin-login-wrapper">
-  <div class="admin-login-box">
-    <h1 class="admin-login-title">ADMIN ACCESS</h1>
-    <p class="admin-login-sub">WrongEsports Control Panel</p>
-
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="adminEmail" placeholder="admin@wrongesports.com">
-    </div>
-
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="adminPassword" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;">
-    </div>
-
-    <div id="adminLoginError" class="error-msg" style="display:none"></div>
-
-    <button id="adminLoginBtn" onclick="doAdminLogin()">
-      LOGIN AS ADMIN
-    </button>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script src="../js/config.js"></script>
-<script src="../js/api.js"></script>
-
-<script>
-  if (localStorage.getItem("we_role") === "admin" && localStorage.getItem("we_token")) {
-    window.location.href = "/admin/panel";
-  }
-
-  async function doAdminLogin() {
-    const email = document.getElementById("adminEmail").value.trim();
-    const password = document.getElementById("adminPassword").value.trim();
-    const btn = document.getElementById("adminLoginBtn");
-    const errorDiv = document.getElementById("adminLoginError");
-
-    errorDiv.style.display = "none";
-    errorDiv.textContent = "";
-
-    if (!email || !password) {
-      errorDiv.textContent = "Please enter email and password.";
-      errorDiv.style.display = "block";
-      return;
-    }
-
-    btn.textContent = "LOGGING IN...";
-    btn.disabled = true;
-
-    try {
-      const hash = CryptoJS.SHA256(password).toString();
-
-      console.log("Attempting admin login...");
-      console.log("Email:", email);
-      console.log("Hash:", hash);
-
-      const data = await apiGetPost("adminLogin", {
-        email: email,
-        passwordHash: hash
-      });
-
-      console.log("API Response:", data);
-
-      if (data.success && data.role === "admin") {
-        localStorage.setItem("we_token", data.token);
-        localStorage.setItem("we_admin_token", data.token);
-        localStorage.setItem("we_userId", data.userId);
-        localStorage.setItem("we_playerName", data.playerName);
-        localStorage.setItem("we_role", data.role);
-
-        btn.textContent = "SUCCESS! REDIRECTING...";
-
-        setTimeout(() => {
-          window.location.href = "/admin/panel";
-        }, 800);
-      } else {
-        errorDiv.textContent = data.error || "Access denied. Check your credentials.";
-        errorDiv.style.display = "block";
-        btn.textContent = "LOGIN AS ADMIN";
-        btn.disabled = false;
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      errorDiv.textContent = "Connection failed: " + err.message;
-      errorDiv.style.display = "block";
-      btn.textContent = "LOGIN AS ADMIN";
-      btn.disabled = false;
-    }
-  }
-
-  document.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") doAdminLogin();
-  });
-</script>
-
+  <p>Redirecting to login...</p>
 </body>
 </html>
-
-

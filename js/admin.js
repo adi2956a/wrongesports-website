@@ -107,7 +107,7 @@ async function loadAdminPanel() {
   document.getElementById("adminLogoutBtn")?.addEventListener("click", () => {
     clearAuth();
     localStorage.removeItem("we_admin_token");
-    window.location.href = "/admin";
+    window.location.href = "/login";
   });
 
   document.getElementById("adminStats").innerHTML = createFakeLoader("Loading dashboard stats", 3);

@@ -82,7 +82,6 @@ function clearAuth() {
 }
 
 async function logout() {
-  const role = localStorage.getItem("we_role");
   const token = localStorage.getItem("we_token");
 
   try {
@@ -91,7 +90,7 @@ async function logout() {
     console.error("Logout request failed", error);
   } finally {
     clearAuth();
-    window.location.href = role === "admin" ? "/admin" : "/login";
+    window.location.href = "/login";
   }
 }
 
@@ -118,7 +117,8 @@ async function requireAdmin() {
 
   if (role !== "admin" || !adminToken) {
     clearAuth();
-    window.location.href = "/admin";
+    localStorage.setItem("returnUrl", "/admin/panel");
+    window.location.href = "/login";
   }
 }
 
