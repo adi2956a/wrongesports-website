@@ -118,7 +118,7 @@ function adminPostAnnouncement(title, message) {
   });
 }
 
-// Step 2 still calls this helper from admin/index.html, so keep it as a GET alias.
+// Step 2 still calls this helper from admin/, so keep it as a GET alias.
 function apiGetPost(action, params = {}) {
   return apiGet(action, params);
 }

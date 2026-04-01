@@ -74,7 +74,7 @@ async function logout() {
     console.error("Logout request failed", error);
   } finally {
     clearAuth();
-    window.location.href = role === "admin" ? "/admin/index.html" : "/login.html";
+    window.location.href = role === "admin" ? "/admin" : "/login";
   }
 }
 
@@ -84,14 +84,14 @@ async function requireAuth() {
 
   if (!token || role === "admin") {
     clearAuth();
-    window.location.href = "/login.html";
+    window.location.href = "/login";
     return;
   }
 
   const valid = await validateSession();
 
   if (!valid) {
-    window.location.href = "/login.html";
+    window.location.href = "/login";
   }
 }
 
@@ -101,7 +101,7 @@ async function requireAdmin() {
 
   if (role !== "admin" || !adminToken) {
     clearAuth();
-    window.location.href = "/admin/index.html";
+    window.location.href = "/admin";
   }
 }
 

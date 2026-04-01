@@ -109,7 +109,7 @@ async function loadTournamentDetail() {
           const currentUser = getUser();
           if (!currentUser.token) {
             localStorage.setItem("returnUrl", window.location.pathname + window.location.search);
-            window.location.href = "/login.html";
+            window.location.href = "/login";
             return;
           }
 

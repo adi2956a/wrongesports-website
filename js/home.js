@@ -31,7 +31,7 @@ function renderTournamentStripCard(item) {
         </div>
         <div class="inline-actions" style="justify-content:space-between; align-items:center;">
           <strong>${escapeHtml(formatCurrency(pick(item, ["prizePool", "PrizePool", "prize"], 0)))}</strong>
-          <a class="btn-primary" href="/tournament-detail.html?id=${encodeURIComponent(id)}">Register</a>
+          <a class="btn-primary" href="/tournament-detail?id=${encodeURIComponent(id)}">Register</a>
         </div>
       </div>
     </article>

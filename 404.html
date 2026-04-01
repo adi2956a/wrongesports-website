@@ -4,6 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 | WrongEsports</title>
+  <script>
+    (function () {
+      const routeMap = {
+        "/admin/panel": "/admin/panel.html",
+        "/dashboard": "/dashboard.html",
+        "/help": "/help.html",
+        "/leaderboard": "/leaderboard.html",
+        "/login": "/login.html",
+        "/media": "/media.html",
+        "/profile": "/profile.html",
+        "/register": "/register.html",
+        "/teams": "/teams.html",
+        "/tournament-detail": "/tournament-detail.html",
+        "/tournaments": "/tournaments.html"
+      };
+
+      const path = window.location.pathname.replace(/\/+$/, "") || "/";
+      const target = routeMap[path];
+      if (target) {
+        window.location.replace(target + window.location.search + window.location.hash);
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>

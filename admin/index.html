@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login &mdash; WrongEsports</title>
+  <script>
+    if (window.location.pathname.endsWith("/admin/index.html")) {
+      window.history.replaceState({}, "", "/admin" + window.location.search + window.location.hash);
+    }
+  </script>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/admin.css">
 </head>
@@ -38,7 +43,7 @@
 
 <script>
   if (localStorage.getItem("we_role") === "admin" && localStorage.getItem("we_token")) {
-    window.location.href = "/admin/panel.html";
+    window.location.href = "/admin/panel";
   }
 
   async function doAdminLogin() {
@@ -83,7 +88,7 @@
         btn.textContent = "SUCCESS! REDIRECTING...";
 
         setTimeout(() => {
-          window.location.href = "/admin/panel.html";
+          window.location.href = "/admin/panel";
         }, 800);
       } else {
         errorDiv.textContent = data.error || "Access denied. Check your credentials.";

@@ -27,7 +27,7 @@ async function handleAdminLogin() {
       localStorage.setItem("we_admin_token", response.token || "");
       localStorage.setItem("we_role", "admin");
       localStorage.setItem("we_playerName", response.playerName || "Admin");
-      window.location.href = "/admin/panel.html";
+      window.location.href = "/admin/panel";
     } else {
       message.textContent = "Access denied";
     }
@@ -107,7 +107,7 @@ async function loadAdminPanel() {
   document.getElementById("adminLogoutBtn")?.addEventListener("click", () => {
     clearAuth();
     localStorage.removeItem("we_admin_token");
-    window.location.href = "/admin/index.html";
+    window.location.href = "/admin";
   });
 
   document.getElementById("adminStats").innerHTML = createFakeLoader("Loading dashboard stats", 3);

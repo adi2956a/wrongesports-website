@@ -17,12 +17,12 @@ function renderTournamentCard(item) {
           <span class="game-badge">${escapeHtml(pickTournament(item, ["game", "Game"], "Free Fire"))}</span>
           <span class="status-badge ${statusClass(status)}">${escapeHtml(formatStatus(status))}</span>
         </div>
-        <p>${escapeHtml(formatDate(pickTournament(item, ["date", "Date"]))) } · ${escapeHtml(formatTime(pickTournament(item, ["time", "Time"])))}</p>
+        <p>${escapeHtml(formatDate(pickTournament(item, ["date", "Date"]))) } &middot; ${escapeHtml(formatTime(pickTournament(item, ["time", "Time"])))}</p>
         <p>${escapeHtml(formatCurrency(pickTournament(item, ["prizePool", "PrizePool"], 0)))}</p>
       </div>
       <div class="card-footer">
         <span>${escapeHtml(String(registered))}/${escapeHtml(String(totalSlots))} Slots</span>
-        <a class="btn-primary" href="/tournament-detail.html?id=${encodeURIComponent(id)}">View Details</a>
+        <a class="btn-primary" href="/tournament-detail?id=${encodeURIComponent(id)}">View Details</a>
       </div>
     </article>
   `;
@@ -57,7 +57,7 @@ async function loadTournaments(status = "upcoming") {
     grid.querySelectorAll(".clickable-card").forEach((card) => {
       card.addEventListener("click", (event) => {
         if (event.target.closest("a")) return;
-        window.location.href = `/tournament-detail.html?id=${encodeURIComponent(card.dataset.id)}`;
+        window.location.href = `/tournament-detail?id=${encodeURIComponent(card.dataset.id)}`;
       });
     });
   } catch (error) {

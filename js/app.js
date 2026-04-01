@@ -76,9 +76,25 @@ function renderError(container, retryHandler) {
   }
 }
 
+function toCleanPath(pathname) {
+  let clean = pathname || "/";
+  clean = clean.replace(/\/index\.html$/i, "/");
+  clean = clean.replace(/\.html$/i, "");
+  if (clean.length > 1 && clean.endsWith("/")) {
+    clean = clean.slice(0, -1);
+  }
+  return clean || "/";
+}
+
+function syncCleanUrl() {
+  const cleanPath = toCleanPath(window.location.pathname);
+  if (cleanPath !== window.location.pathname) {
+    window.history.replaceState({}, "", cleanPath + window.location.search + window.location.hash);
+  }
+}
+
 function getCurrentPath() {
-  const path = window.location.pathname;
-  return path === "/" ? "/index.html" : path;
+  return toCleanPath(window.location.pathname);
 }
 
 function statusClass(status) {
@@ -138,7 +154,7 @@ function renderNavAuth() {
   const roleLabel = role === "admin" ? "Admin access" : "Player dashboard";
 
   if (token) {
-    const dashboardHref = role === "admin" ? "/admin/panel.html" : "/dashboard.html";
+    const dashboardHref = role === "admin" ? "/admin/panel" : "/dashboard";
     navAuth.innerHTML = `
       <a href="${dashboardHref}" class="nav-user-card nav-dashboard-chip">
         <span class="nav-user-avatar">${initial}</span>
@@ -153,8 +169,8 @@ function renderNavAuth() {
     if (logoutBtn) logoutBtn.addEventListener("click", logout);
   } else {
     navAuth.innerHTML = `
-      <a href="/login.html" class="btn-secondary">Login</a>
-      <a href="/register.html" class="btn-primary">Register</a>
+      <a href="/login" class="btn-secondary">Login</a>
+      <a href="/register" class="btn-primary">Register</a>
     `;
   }
 }
@@ -228,6 +244,7 @@ function bindScrollTabs(buttonSelector, panelSelector) {
 }
 
 function initNavbar() {
+  syncCleanUrl();
   const currentPath = getCurrentPath();
   document.querySelectorAll(".nav-links a").forEach((link) => {
     if (link.getAttribute("href") === currentPath) {

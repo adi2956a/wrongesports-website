@@ -77,7 +77,7 @@ async function loadDashboard() {
                     <td>${escapeHtml(pick(item, ["name", "Name"], "Tournament"))}</td>
                     <td>${escapeHtml(formatDate(pick(item, ["date", "Date"])))}</td>
                     <td><span class="status-badge ${statusClass(status)}">${escapeHtml(formatStatus(status))}</span></td>
-                    <td>${status === "ongoing" ? `<a href="/tournament-detail.html?id=${encodeURIComponent(tournamentId(item))}">View Room</a>` : "-"}</td>
+                    <td>${status === "ongoing" ? `<a href="/tournament-detail?id=${encodeURIComponent(tournamentId(item))}">View Room</a>` : "-"}</td>
                   </tr>
                 `;
               }).join("")}

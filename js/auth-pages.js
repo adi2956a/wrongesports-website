@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (registerForm) {
     if (localStorage.getItem("we_token")) {
-      window.location.href = "/dashboard.html";
+      window.location.href = "/dashboard";
       return;
     }
 
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (loginForm) {
     if (localStorage.getItem("we_token")) {
-      window.location.href = "/dashboard.html";
+      window.location.href = "/dashboard";
       return;
     }
 
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.success) {
           const returnUrl = localStorage.getItem("returnUrl");
           localStorage.removeItem("returnUrl");
-          window.location.href = returnUrl || "/dashboard.html";
+          window.location.href = returnUrl || "/dashboard";
         } else {
           errorBox.textContent = response.message || "Invalid email or password.";
         }

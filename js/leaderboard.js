@@ -64,7 +64,7 @@ function renderLeaderboardTable() {
 
   container.querySelectorAll("tbody tr[data-user-id]").forEach((row) => {
     row.addEventListener("click", () => {
-      window.location.href = `/profile.html?userId=${encodeURIComponent(row.dataset.userId)}`;
+      window.location.href = `/profile?userId=${encodeURIComponent(row.dataset.userId)}`;
     });
   });
 
