@@ -140,14 +140,13 @@ function renderNavAuth() {
   if (token) {
     const dashboardHref = role === "admin" ? "/admin/panel.html" : "/dashboard.html";
     navAuth.innerHTML = `
-      <div class="nav-user-card">
+      <a href="${dashboardHref}" class="nav-user-card nav-dashboard-chip">
         <span class="nav-user-avatar">${initial}</span>
         <span class="nav-user-copy">
           <strong>${escapeHtml(playerName)}</strong>
           <small>${roleLabel}</small>
         </span>
-      </div>
-      <a href="${dashboardHref}" class="btn-secondary nav-dashboard-link">Dashboard</a>
+      </a>
       <button type="button" class="btn-secondary" id="navLogoutBtn">Logout</button>
     `;
     const logoutBtn = document.getElementById("navLogoutBtn");

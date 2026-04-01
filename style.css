@@ -412,6 +412,18 @@ tbody tr:hover {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.nav-dashboard-chip {
+  min-height: 44px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-dashboard-chip:hover {
+  color: inherit;
+  border-color: rgba(0, 212, 255, 0.28);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
+  transform: translateY(-1px);
+}
+
 .nav-user-avatar,
 .identity-chip-mark {
   width: 38px;
@@ -452,11 +464,6 @@ tbody tr:hover {
   font-size: 0.74rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.nav-dashboard-link {
-  border-color: rgba(0, 212, 255, 0.22);
-  box-shadow: inset 0 0 0 1px rgba(0, 212, 255, 0.08);
 }
 
 .nav-toggle {
